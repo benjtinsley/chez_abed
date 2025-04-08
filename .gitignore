@@ -12,6 +12,7 @@ env.bak/
 # Environment variables
 .env
 .env.*
+!.env.example
 
 # Distribution / packaging
 .Python
