@@ -1,0 +1,7 @@
+[
+    {
+        "flavor": ["sour", "fragrant", "peppery", "sweet", "fatty", "spiced", "salty", "earthy", "bitter"],
+        "texture": ["crispy", "juicy", "crunchy", "smooth", "soft", "tender", "flaky", "creamy", "sticky", "chewy", "fluffy", "grainy"],
+        "type": ["Snack", "Breakfast", "Dinner", "Dessert", "Lunch"]
+    }
+]

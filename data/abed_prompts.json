@@ -1,0 +1,30 @@
+[
+  {
+    "flavor": ["sour", "fragrant", "earthy"],
+    "texture": ["chewy", "crispy"],
+    "type": "Dinner"
+  },
+  {
+    "flavor": ["sweet", "spiced", "sour"],
+    "texture": ["smooth", "fluffy"],
+    "type": "Dessert"
+  },
+  {
+    "flavor": ["salty", "earthy", "peppery"],
+    "texture": ["tender", "creamy"],
+    "type": "Lunch"
+  },
+  {
+    "flavor": ["bitter", "peppery"],
+    "texture": ["juicy", "sticky"],
+    "type": "Snack"
+  },
+  {
+    "flavor": ["fatty", "salty"],
+    "type": "Breakfast"
+  },
+  {
+    "texture": ["flaky", "crunchy"],
+    "type": "Dinner"
+  }
+]
