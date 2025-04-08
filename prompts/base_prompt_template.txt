@@ -1,0 +1,1 @@
+# Base prompt template for Chez Abed
