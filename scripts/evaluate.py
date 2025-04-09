@@ -4,7 +4,8 @@ from pathlib import Path
 import yaml
 
 # Load metric config from YAML
-with open(Path(__file__).resolve().parent / "metrics_config.yaml") as f:
+ROOT_DIR = Path(__file__).resolve().parent.parent
+with open(ROOT_DIR / "evaluation/metrics_config.yaml") as f:
     METRIC_CONFIG = yaml.safe_load(f)
 
 # Add the project root to Python's module search path
@@ -31,4 +32,4 @@ for item in data:
 with open(OUTPUT_FILE, "w") as f:
     json.dump(data, f, indent=2)
 
-print("✅ Scoring complete. Results saved to scored_recipes.json")
+# print("✅ Scoring complete. Results saved to scored_recipes.json")

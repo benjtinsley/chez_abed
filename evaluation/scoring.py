@@ -3,7 +3,8 @@ import yaml
 from pathlib import Path
 
 # Load metric config from YAML
-with open(Path(__file__).resolve().parent / "metrics_config.yaml") as f:
+ROOT_DIR = Path(__file__).resolve().parent.parent
+with open(ROOT_DIR / "evaluation/metrics_config.yaml") as f:
     METRIC_CONFIG = yaml.safe_load(f)
 
 def score_recipe(recipe_entry, seen_titles, seen_ingredient_fingerprints):
@@ -94,8 +95,7 @@ def score_instruction_coherence(instructions):
 def score_cues(instructions):
     # Brute force check for cooking cues
     cues = [
-        "until golden", "until soft", "until browned", "until crisp", "until tender",
-        "until fragrant", "until bubbling", "until thickened", "until melted", "until reduced"
+        "until", "when", "after", "before", "while", "as", "during", "then", "next", "finally"
     ]
     instructions_lower = instructions.lower()
     found = set(cue for cue in cues if cue in instructions_lower)

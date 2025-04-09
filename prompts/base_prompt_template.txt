@@ -18,6 +18,9 @@ Respond only with the recipe in this format:
 
 **Description:** [A short paragraph that persuades the reader _why_ they want to cook this dish, highlighting the flavor, texture, or emotional and social impact.]
 
+**Equipment:**
+- ...
+
 **Ingredients:**
 - ...
 

@@ -1,7 +1,26 @@
 [
-    {
-        "flavor": ["sour", "fragrant", "peppery", "sweet", "fatty", "spiced", "salty", "earthy", "bitter"],
-        "texture": ["crispy", "juicy", "crunchy", "smooth", "soft", "tender", "flaky", "creamy", "sticky", "chewy", "fluffy", "grainy"],
-        "type": ["Snack", "Breakfast", "Dinner", "Dessert", "Lunch"]
-    }
+{
+    "name": "type",
+    "prompt": "🍽️ Select which Type of meal this is",
+    "instruction": "space to select, enter to confirm",
+    "options": ["Snack", "Breakfast", "Lunch", "Dinner", "Dessert"],
+    "multi": false,
+    "required": true
+ },
+  {
+    "name": "flavor",
+    "prompt": "🧂 Select any Flavor descriptors or leave blank",
+    "instruction": "space to select, enter to confirm",
+    "options": ["sour", "fragrant", "peppery", "sweet", "fatty", "spiced", "salty", "earthy", "bitter"],
+    "multi": true,
+    "required": false
+  },
+  {
+    "name": "texture",
+    "prompt": "🍴 Select any Texture descriptors or leave blank",
+    "instruction": "space to select, enter to confirm",
+    "options": ["crispy", "juicy", "crunchy", "smooth", "soft", "tender", "flaky", "creamy", "sticky", "chewy", "fluffy", "grainy"],
+    "multi": true,
+    "required": false
+  }
 ]
