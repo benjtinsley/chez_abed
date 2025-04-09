@@ -1,16 +1,56 @@
 [
   {
-    "type": "Dessert",
+    "type": "Breakfast",
+    "flavor": [
+      "peppery",
+      "salty",
+      "earthy"
+    ],
+    "texture": [
+      "soft",
+      "flaky",
+      "fluffy"
+    ]
+  },
+  {
+    "type": "Lunch",
+    "flavor": [
+      "peppery",
+      "fatty",
+      "earthy"
+    ],
+    "texture": [
+      "crunchy",
+      "tender",
+      "fluffy"
+    ]
+  },
+  {
+    "type": "Dinner",
     "flavor": [
       "sweet",
       "fatty",
-      "spiced",
+      "salty"
+    ],
+    "texture": [
+      "juicy",
+      "tender",
+      "chewy"
+    ]
+  },
+  {
+    "type": "Dessert",
+    "flavor": [
+      "sour",
+      "fragrant",
+      "sweet",
       "bitter"
     ],
     "texture": [
-      "crispy",
+      "smooth",
       "soft",
-      "flaky"
+      "creamy",
+      "fluffy"
     ]
   }
 ]

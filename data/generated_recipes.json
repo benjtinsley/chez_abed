@@ -1,20 +1,72 @@
 [
   {
     "input": {
-      "type": "Dessert",
+      "type": "Breakfast",
+      "flavor": [
+        "peppery",
+        "salty",
+        "earthy"
+      ],
+      "texture": [
+        "soft",
+        "flaky",
+        "fluffy"
+      ]
+    },
+    "prompt": "# Base prompt template for Chez Abed\nYou are a culinary language model named Abed. You create original recipes from abstract sensory and structural descriptors. Your core mission is to inspire anyone to be able to craft a delightful meal, no matter their technical background.\n\nGiven:\n- Flavor: peppery, salty, earthy\n- Texture: soft, flaky, fluffy\n- Type: Breakfast\n\nYour task is to:\n1. Invent a recipe that aligns with these descriptors.\n2. List all ingredients clearly with quantities.\n3. Write step-by-step instructions that use all ingredients.\n4. Ensure instructions include descriptive cues like \u201cuntil golden\u201d or \u201cuntil soft.\u201d\n5. Keep it plausible, satisfying, and novel.\n\nRespond only with the recipe in this format:\n\n---\n**Title:** [Generated title]\n\n**Description:** [A short paragraph that persuades the reader _why_ they want to cook this dish, highlighting the flavor, texture, or emotional and social impact.]\n\n**Equipment:**\n- ...\n\n**Ingredients:**\n- ...\n\n**Instructions:**\n1. ...\n2. ...\n\n**Tags:** flavor=[...] | texture=[...] | type=[...]",
+    "recipe": "**Title:** Peppery-Spiced Fluffy Breakfast Biscuits\n\n**Description:** These peppery-spiced fluffy breakfast biscuits are the perfect way to kickstart your day with a savory and satisfying treat. The combination of peppery, salty, and earthy flavors paired with a soft, flaky, and fluffy texture will leave you craving for more. These biscuits are easy to make and will impress anyone you serve them to at the breakfast table.\n\n**Equipment:**\n- Mixing bowl\n- Baking sheet\n- Pastry cutter or fork\n- Rolling pin\n\n**Ingredients:**\n- 2 cups all-purpose flour\n- 1 tablespoon baking powder\n- 1/2 teaspoon salt\n- 1 teaspoon black pepper\n- 1/2 teaspoon paprika\n- 1/4 teaspoon cayenne pepper\n- 1/2 cup unsalted butter, cold and cubed\n- 1 cup buttermilk\n\n**Instructions:**\n1. Preheat your oven to 425\u00b0F (220\u00b0C) and line a baking sheet with parchment paper.\n2. In a mixing bowl, combine the flour, baking powder, salt, black pepper, paprika, and cayenne pepper. Mix well to evenly distribute the spices.\n3. Add the cold, cubed butter to the dry ingredients. Using a pastry cutter or fork, cut the butter into the flour mixture until it resembles coarse crumbs.\n4. Make a well in the center of the mixture and pour in the buttermilk. Gently stir until the dough comes together. Be careful not to overmix.\n5. Turn the dough out onto a floured surface and gently knead it a few times until it holds together.\n6. Roll out the dough to about 1-inch thickness. Using a biscuit cutter or a glass, cut out biscuits and place them on the prepared baking sheet.\n7. Bake in the preheated oven for 12-15 minutes or until the biscuits are golden brown and fluffy.\n8. Serve the peppery-spiced fluffy breakfast biscuits warm with butter or your favorite breakfast toppings.\n\n**Tags:** flavor=peppery, salty, earthy | texture=soft, flaky, fluffy | type=Breakfast"
+  },
+  {
+    "input": {
+      "type": "Lunch",
+      "flavor": [
+        "peppery",
+        "fatty",
+        "earthy"
+      ],
+      "texture": [
+        "crunchy",
+        "tender",
+        "fluffy"
+      ]
+    },
+    "prompt": "# Base prompt template for Chez Abed\nYou are a culinary language model named Abed. You create original recipes from abstract sensory and structural descriptors. Your core mission is to inspire anyone to be able to craft a delightful meal, no matter their technical background.\n\nGiven:\n- Flavor: peppery, fatty, earthy\n- Texture: crunchy, tender, fluffy\n- Type: Lunch\n\nYour task is to:\n1. Invent a recipe that aligns with these descriptors.\n2. List all ingredients clearly with quantities.\n3. Write step-by-step instructions that use all ingredients.\n4. Ensure instructions include descriptive cues like \u201cuntil golden\u201d or \u201cuntil soft.\u201d\n5. Keep it plausible, satisfying, and novel.\n\nRespond only with the recipe in this format:\n\n---\n**Title:** [Generated title]\n\n**Description:** [A short paragraph that persuades the reader _why_ they want to cook this dish, highlighting the flavor, texture, or emotional and social impact.]\n\n**Equipment:**\n- ...\n\n**Ingredients:**\n- ...\n\n**Instructions:**\n1. ...\n2. ...\n\n**Tags:** flavor=[...] | texture=[...] | type=[...]",
+    "recipe": "**Title:** Peppery Arugula and Goat Cheese Stuffed Chicken Breast\n\n**Description:** This dish combines the peppery bite of arugula, the creamy richness of goat cheese, and the earthy flavor of chicken for a luxurious and flavorful lunch experience. The contrast of textures between the crunchy skin, tender chicken, and fluffy cheese creates a harmonious balance that will leave you feeling satisfied and indulged.\n\n**Equipment:**\n- Oven\n- Baking dish\n- Mixing bowl\n- Frying pan\n\n**Ingredients:**\n- 2 chicken breasts\n- 2 cups arugula\n- 1/2 cup goat cheese\n- 2 tablespoons olive oil\n- Salt and pepper to taste\n\n**Instructions:**\n1. Preheat the oven to 375\u00b0F (190\u00b0C).\n2. Butterfly the chicken breasts by cutting them horizontally but not all the way through, then open them up like a book.\n3. Season the inside of the chicken breasts with salt and pepper.\n4. In a mixing bowl, combine the arugula and goat cheese. Season with salt and pepper.\n5. Divide the arugula and goat cheese mixture between the chicken breasts, then fold the breasts back over to enclose the filling.\n6. Heat olive oil in a frying pan over medium-high heat.\n7. Sear the stuffed chicken breasts on both sides until golden brown, about 3-4 minutes per side.\n8. Transfer the chicken breasts to a baking dish and bake in the preheated oven for 20-25 minutes or until the chicken is cooked through.\n9. Serve the stuffed chicken breasts hot, garnished with extra arugula leaves if desired.\n\n**Tags:** flavor=peppery, earthy | texture=crunchy, tender, fluffy | type=Lunch"
+  },
+  {
+    "input": {
+      "type": "Dinner",
       "flavor": [
         "sweet",
         "fatty",
-        "spiced",
+        "salty"
+      ],
+      "texture": [
+        "juicy",
+        "tender",
+        "chewy"
+      ]
+    },
+    "prompt": "# Base prompt template for Chez Abed\nYou are a culinary language model named Abed. You create original recipes from abstract sensory and structural descriptors. Your core mission is to inspire anyone to be able to craft a delightful meal, no matter their technical background.\n\nGiven:\n- Flavor: sweet, fatty, salty\n- Texture: juicy, tender, chewy\n- Type: Dinner\n\nYour task is to:\n1. Invent a recipe that aligns with these descriptors.\n2. List all ingredients clearly with quantities.\n3. Write step-by-step instructions that use all ingredients.\n4. Ensure instructions include descriptive cues like \u201cuntil golden\u201d or \u201cuntil soft.\u201d\n5. Keep it plausible, satisfying, and novel.\n\nRespond only with the recipe in this format:\n\n---\n**Title:** [Generated title]\n\n**Description:** [A short paragraph that persuades the reader _why_ they want to cook this dish, highlighting the flavor, texture, or emotional and social impact.]\n\n**Equipment:**\n- ...\n\n**Ingredients:**\n- ...\n\n**Instructions:**\n1. ...\n2. ...\n\n**Tags:** flavor=[...] | texture=[...] | type=[...]",
+    "recipe": "**Title:** Sweet and Salty Glazed Pork Chops\n\n**Description:** These succulent pork chops are a perfect balance of sweet, fatty, and salty flavors, with a juicy and tender texture that will leave you craving for more. This dish is ideal for a cozy dinner at home or for impressing guests with your culinary skills.\n\n**Equipment:**\n- Skillet\n- Oven\n- Mixing bowl\n- Tongs\n\n**Ingredients:**\n- 4 bone-in pork chops\n- 1/4 cup honey\n- 2 tbsp soy sauce\n- 2 tbsp brown sugar\n- 1 tsp garlic powder\n- Salt and pepper, to taste\n- 2 tbsp olive oil\n\n**Instructions:**\n1. Preheat your oven to 375\u00b0F (190\u00b0C).\n2. In a mixing bowl, combine honey, soy sauce, brown sugar, garlic powder, salt, and pepper. Mix well to create the glaze.\n3. Heat olive oil in a skillet over medium-high heat.\n4. Season the pork chops with salt and pepper on both sides.\n5. Sear the pork chops in the skillet for about 3-4 minutes on each side, or until golden brown.\n6. Brush the glaze over each pork chop, then transfer the skillet to the preheated oven.\n7. Bake the pork chops for 10-15 minutes, or until they reach an internal temperature of 145\u00b0F (63\u00b0C) and the glaze is caramelized.\n8. Remove from the oven and let the pork chops rest for a few minutes before serving.\n9. Serve the sweet and salty glazed pork chops with your favorite side dishes and enjoy!\n\n**Tags:** flavor=[sweet, fatty, salty] | texture=[juicy, tender] | type=[Dinner]"
+  },
+  {
+    "input": {
+      "type": "Dessert",
+      "flavor": [
+        "sour",
+        "fragrant",
+        "sweet",
         "bitter"
       ],
       "texture": [
-        "crispy",
+        "smooth",
         "soft",
-        "flaky"
+        "creamy",
+        "fluffy"
       ]
     },
-    "prompt": "# Base prompt template for Chez Abed\nYou are a culinary language model named Abed. You create original recipes from abstract sensory and structural descriptors. Your core mission is to inspire anyone to be able to craft a delightful meal, no matter their technical background.\n\nGiven:\n- Flavor: sweet, fatty, spiced, bitter\n- Texture: crispy, soft, flaky\n- Type: Dessert\n\nYour task is to:\n1. Invent a recipe that aligns with these descriptors.\n2. List all ingredients clearly with quantities.\n3. Write step-by-step instructions that use all ingredients.\n4. Ensure instructions include descriptive cues like \u201cuntil golden\u201d or \u201cuntil soft.\u201d\n5. Keep it plausible, satisfying, and novel.\n\nRespond only with the recipe in this format:\n\n---\n**Title:** [Generated title]\n\n**Description:** [A short paragraph that persuades the reader _why_ they want to cook this dish, highlighting the flavor, texture, or emotional and social impact.]\n\n**Equipment:**\n- ...\n\n**Ingredients:**\n- ...\n\n**Instructions:**\n1. ...\n2. ...\n\n**Tags:** flavor=[...] | texture=[...] | type=[...]",
-    "recipe": "**Title:** Spiced Apple Crumble Delight\n\n**Description:** Indulge in a comforting and aromatic dessert with a perfect balance of sweet, spiced apples and a crispy, flaky crumble topping. The combination of sweet, fatty, spiced, and slightly bitter flavors will create a symphony of tastes that will warm your soul.\n\n**Equipment:**\n- Mixing bowl\n- Baking dish\n- Knife\n- Peeler\n\n**Ingredients:**\n- 4 apples, peeled, cored, and sliced\n- 1/4 cup brown sugar\n- 1 tsp cinnamon\n- 1/2 tsp nutmeg\n- 1/4 tsp cloves\n- 1/4 cup butter, cold and diced\n- 1/2 cup all-purpose flour\n- 1/4 cup oats\n- 1/4 cup chopped nuts (almonds, pecans, or walnuts)\n- Vanilla ice cream (optional, for serving)\n\n**Instructions:**\n1. Preheat the oven to 350\u00b0F (180\u00b0C).\n2. In a mixing bowl, combine the sliced apples, brown sugar, cinnamon, nutmeg, and cloves. Toss until the apples are evenly coated with the spices.\n3. Transfer the spiced apples to a baking dish, spreading them out evenly.\n4. In the same bowl (or a separate one), mix the flour, oats, chopped nuts, and cold diced butter. Use your fingers to rub the butter into the dry ingredients until it resembles coarse crumbs.\n5. Sprinkle the crumble mixture over the spiced apples in the baking dish.\n6. Bake in the preheated oven for about 30-35 minutes, or until the top is golden brown and the apples are soft and bubbly.\n7. Remove from the oven and let it cool slightly before serving.\n8. Serve the Spiced Apple Crumble Delight warm, topped with a scoop of vanilla ice cream if desired.\n\n**Tags:** flavor=[sweet, spiced, bitter] | texture=[crispy, flaky] | type=[Dessert]"
+    "prompt": "# Base prompt template for Chez Abed\nYou are a culinary language model named Abed. You create original recipes from abstract sensory and structural descriptors. Your core mission is to inspire anyone to be able to craft a delightful meal, no matter their technical background.\n\nGiven:\n- Flavor: sour, fragrant, sweet, bitter\n- Texture: smooth, soft, creamy, fluffy\n- Type: Dessert\n\nYour task is to:\n1. Invent a recipe that aligns with these descriptors.\n2. List all ingredients clearly with quantities.\n3. Write step-by-step instructions that use all ingredients.\n4. Ensure instructions include descriptive cues like \u201cuntil golden\u201d or \u201cuntil soft.\u201d\n5. Keep it plausible, satisfying, and novel.\n\nRespond only with the recipe in this format:\n\n---\n**Title:** [Generated title]\n\n**Description:** [A short paragraph that persuades the reader _why_ they want to cook this dish, highlighting the flavor, texture, or emotional and social impact.]\n\n**Equipment:**\n- ...\n\n**Ingredients:**\n- ...\n\n**Instructions:**\n1. ...\n2. ...\n\n**Tags:** flavor=[...] | texture=[...] | type=[...]",
+    "recipe": "---\n**Title:** Fragrant Lemon Souffl\u00e9\n\n**Description:** This delicate and airy dessert combines the bright flavors of lemon with a hint of fragrant sweetness in a fluffy and creamy texture. Perfect for impressing guests or treating yourself to a sophisticated treat.\n\n**Equipment:**\n- Mixing bowls\n- Whisk\n- Saucepan\n- Ramekins\n- Baking sheet\n- Electric mixer\n\n**Ingredients:**\n- 4 eggs, separated\n- 1/2 cup sugar\n- Zest of 2 lemons\n- 1/4 cup lemon juice\n- 2 tablespoons all-purpose flour\n- 1/2 cup milk\n- 1/4 teaspoon salt\n- Powdered sugar, for dusting\n\n**Instructions:**\n1. Preheat the oven to 375\u00b0F (190\u00b0C) and grease the ramekins with butter. Place them on a baking sheet.\n2. In a saucepan over medium heat, whisk together the lemon zest, lemon juice, flour, milk, and salt. Cook until thickened, then remove from heat and let it cool slightly.\n3. In a mixing bowl, beat the egg yolks with 1/4 cup of sugar until pale and creamy. Slowly pour in the lemon mixture, stirring constantly.\n4. In a separate bowl, whip the egg whites until soft peaks form. Gradually add the remaining sugar and continue whipping until glossy peaks form.\n5. Gently fold a third of the egg whites into the lemon mixture to lighten it, then carefully fold in the rest until just combined.\n6. Divide the souffl\u00e9 mixture among the prepared ramekins, filling almost to the top. Run your thumb around the edge of each ramekin to create a slight indentation.\n7. Bake the souffl\u00e9s for 12-15 minutes until puffed and golden on top.\n8. Dust with powdered sugar and serve immediately. Enjoy the fragrant, sour-sweet goodness of the lemon souffl\u00e9s!\n\n**Tags:** flavor=sour, fragrant, sweet | texture=creamy, fluffy | type=Dessert"
   }
 ]

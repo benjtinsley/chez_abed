@@ -3,12 +3,15 @@ from pathlib import Path
 import subprocess
 import questionary
 
-ABED_VOCAB_FILE = Path("data/abed_vocab.json")
-PROMPTS_FILE = Path("data/abed_prompts.json")
+ROOT_DIR = Path(__file__).resolve().parents[2]
+ABED_VOCAB_FILE = ROOT_DIR / "data" / "abed_vocab.json"
+PROMPTS_FILE = ROOT_DIR / "data" / "abed_prompts.json"
+
 
 def load_abed_vocab():
     with open(ABED_VOCAB_FILE, "r") as f:
         return json.load(f)
+
 
 def collect_abed_input(abed_vocab):
     prompt = {}
@@ -18,19 +21,26 @@ def collect_abed_input(abed_vocab):
         answer = getattr(questionary, prompt_type)(
             message=item["prompt"],
             instruction=item["instruction"],
-            choices=item["options"]
+            choices=item["options"],
         ).ask()
 
         if item["required"] and not answer:
-            print(f"⚠️  {item['name'].capitalize()} is required. Please select at least one.")
+            print(
+                f"⚠️  {item['name'].capitalize()} is required. Please select "
+                "at least one."
+            )
             return collect_abed_input(abed_vocab)
 
         prompt[item["name"]] = answer
 
     return prompt
 
+
 def main():
-    print("🍳 Welcome to Chez Abed: Recipe creation from Abstracted Bare Element Descriptors.\n")
+    print(
+        "🍳 Welcome to Chez Abed: Recipe creation from "
+        "Abstracted Bare Element Descriptors.\n"
+    )
 
     abed_vocab = load_abed_vocab()
     all_prompts = []
@@ -39,30 +49,40 @@ def main():
         abed_set = collect_abed_input(abed_vocab)
         all_prompts.append(abed_set)
 
-        more = questionary.confirm("Would you like to add another recipe with a different ABED set?").ask()
+        more = questionary.confirm(
+            "Would you like to add another recipe with a different ABED set?"
+        ).ask()
         if not more:
             break
 
     # Show summary
-    print("\n📃 Preparing to generate", len(all_prompts), "recipe(s) with the following profiles:\n")
+    print(
+        "\n📃 Preparing to generate",
+        len(all_prompts),
+        "recipe(s) with the following profiles:\n",
+    )
     for idx, prompt in enumerate(all_prompts, start=1):
         flavor = ", ".join(prompt["flavor"]) if prompt["flavor"] else "—"
         texture = ", ".join(prompt["texture"]) if prompt["texture"] else "—"
-        print(f"{idx}. Flavor: {flavor} | Texture: {texture} | Type: {prompt['type']}")
+        print(
+            f"{idx}. Flavor: {flavor} | Texture: {texture} | "
+            f"Type: {prompt['type']}"
+        )
 
     # Save to prompts file
     with open(PROMPTS_FILE, "w") as f:
         json.dump(all_prompts, f, indent=2)
 
     print("\n👆 Generating recipes...")
-    subprocess.run(["python", "scripts/generate.py"])
+    subprocess.run(["python", "-m", "app.scripts.generate"])
 
     print("✏️ Scoring recipes...")
-    subprocess.run(["python", "scripts/evaluate.py"])
+    subprocess.run(["python", "-m", "app.scripts.evaluate"])
 
     print("\n✅ All recipes generated and scored!\nCheck your files:")
     print("- 🧾 data/generated_recipes.json")
     print("- 🏆 data/scored_recipes.json")
+
 
 if __name__ == "__main__":
     main()

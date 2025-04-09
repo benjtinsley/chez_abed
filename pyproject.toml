@@ -1,0 +1,10 @@
+[tool.black]
+line-length = 79
+target-version = ["py311"]
+
+[tool.isort]
+profile = "black"
+
+[tool.flake8]
+max-line-length = 79
+exclude = [".venv", "build", "dist"]

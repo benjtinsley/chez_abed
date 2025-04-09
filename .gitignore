@@ -67,6 +67,10 @@ coverage.xml
 
 # Logs
 *.log
+logs/*
 
 # PyCharm
 *.iml
+
+# Git
+.git/
