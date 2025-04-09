@@ -35,7 +35,13 @@ Under the hood it uses the OpenAI GPT-3.5 Turbo model, so an OpenAI API key is n
    We recommend using a virtual environment.
 
    ```bash
-   pip install -r requirements.txt
+   $ python -m venv .venv && source .venv/bin/activate 
+   ```
+
+   Install the dependencies.
+
+   ```bash
+   $ pip install -r requirements.txt
    ```
 
 2. **Set your OpenAI API key**
@@ -61,25 +67,28 @@ Under the hood it uses the OpenAI GPT-3.5 Turbo model, so an OpenAI API key is n
    - Generate recipes using `generate.py`
    - Score them using `evaluate.py`
 
+   Generated recipes will be stored at logs/[year]/[month]/[date]/[time]-[recipe-title].md
 ---
 
 ## 🗃️ File Structure
 
 ```
 chez_abed/
-├── data/
-│   ├── abed_vocab.json          # ABED categories and descriptor options
-│   ├── generated_abed_prompts.json        # Input prompts collected during CLI run
-│   ├── generated_recipes.json   # Output from recipe generation
-│   └── generated_scored_recipes.json      # Scored results of recipes
-├── evaluation/
-│   └── scoring.py               # Scoring logic
-├── scripts/
-│   ├── generate.py              # Calls OpenAI to generate recipes
-│   ├── evaluate.py              # Evaluates and scores generated recipes
-│   └── menu.py                  # Interactive CLI for creating recipe prompts
-├── metrics_config.yaml          # Scoring weights and novelty thresholds
-├── .env                         # OpenAI key (not checked in)
+├── app/
+|   ├── data/
+|   │   ├── abed_vocab.json                    # ABED categories and descriptor options
+|   │   ├── generated_abed_prompts.json        # Input prompts collected during CLI run
+|   │   ├── generated_recipes.json             # Output from recipe generation
+|   │   └── generated_scored_recipes.json      # Scored results of recipes
+|   ├── evaluation/
+|   │   └── scoring.py                         # Scoring logic
+|   ├── scripts/
+|   │   ├── generate.py                        # Calls OpenAI to generate recipes
+|   │   ├── evaluate.py                        # Evaluates and scores generated recipes
+|   │   └── menu.py                            # Interactive CLI for creating recipe prompts
+├── logs/                                      # Logged recipes
+├── metrics_config.yaml                        # Scoring weights and novelty thresholds
+├── .env                                       # OpenAI key & other environment variables (not checked in)
 ├── requirements.txt
 └── README.md
 ```
