@@ -1,6 +1,6 @@
 # Chez Abed
 
-**Chez Abed** is a kitchen for an LLM-powered recipe generation tool. Instead of providing a list of ingredients, users input abstract sensory descriptors—called **ABEDs** (Abstracted Bare Element Descriptors)—such as flavors, textures, and meal type. Chez Abed transforms these inputs into complete recipes and scores them based on creativity, structure, and coherence.
+**Chez Abed** is a kitchen for an LLM-powered recipe generation tool. Instead of providing a list of ingredients, users input abstract sensory descriptors—called **ABEDs** (Abstracted Bare Element Descriptors) such as flavors, textures, and meal type. Chez Abed transforms these inputs into complete recipes and scores them based on creativity, structure, and coherence.
 
 ---
 
@@ -46,7 +46,7 @@ Under the hood it uses the OpenAI GPT-3.5 Turbo model, so an OpenAI API key is n
    $ mv .env.example .env
    ```
 
-    In the newly created `.env` file, add your OpenAI API key:
+    In the newly created `.env` file, add your [OpenAI API key](https://platform.openai.com/api-keys):
    ```env
    OPENAI_API_KEY=your_key_here
    ```
@@ -54,7 +54,7 @@ Under the hood it uses the OpenAI GPT-3.5 Turbo model, so an OpenAI API key is n
 3. **Run the interactive menu**
 
    ```bash
-   python scripts/menu.py
+   python -m app.scripts.menu
    ```
 
    You'll be guided to select ABEDs for one or more recipes. The tool will then:
