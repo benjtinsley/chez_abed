@@ -1,1 +1,20 @@
 # Metric weights and scoring config
+ 
+weights:
+  ingredient_usage_completeness: 0.25
+  instruction_coherence: 0.25
+  plausibility: 0.2
+  conciseness: 0.15
+  cues: 0.05
+  novelty: 0.05
+ 
+novelty_thresholds:
+  title:
+    soft_penalty: 0.3
+    hard_penalty: 0.7
+  ingredients:
+    soft_penalty: 0.6
+    hard_penalty: 0.9
+  weighting:
+    title: 0.4
+    ingredients: 0.6

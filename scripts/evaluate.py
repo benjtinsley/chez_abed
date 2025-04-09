@@ -1,7 +1,11 @@
-# evaluate.py – evaluate generated recipes using custom rubric
 import sys
 import json
 from pathlib import Path
+import yaml
+
+# Load metric config from YAML
+with open(Path(__file__).resolve().parent / "metrics_config.yaml") as f:
+    METRIC_CONFIG = yaml.safe_load(f)
 
 # Add the project root to Python's module search path
 sys.path.append(str(Path(__file__).resolve().parent.parent))

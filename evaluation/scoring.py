@@ -1,5 +1,10 @@
-# scoring.py – contains metric calculations for recipe evaluation
 import re
+import yaml
+from pathlib import Path
+
+# Load metric config from YAML
+with open(Path(__file__).resolve().parent / "metrics_config.yaml") as f:
+    METRIC_CONFIG = yaml.safe_load(f)
 
 def score_recipe(recipe_entry, seen_titles, seen_ingredient_fingerprints):
     """
@@ -25,14 +30,7 @@ def score_recipe(recipe_entry, seen_titles, seen_ingredient_fingerprints):
     }
 
     # Weights for each metric
-    weights = {
-        "ingredient_usage_completeness": 0.25,
-        "instruction_coherence": 0.25,
-        "plausibility": 0.2,
-        "conciseness": 0.15,
-        "cues": 0.05,
-        "novelty": 0.05
-    }
+    weights = METRIC_CONFIG["weights"]
 
     total = sum(scores[k] * weights.get(k, 0) for k in scores)
     scores["MScore"] = round(total, 4)
@@ -59,6 +57,7 @@ def score_ingredient_usage(ingredients, instructions):
     return round(mentioned / len(ingredients), 2) if ingredients else 0
 
 def score_instruction_coherence(instructions):
+    # Brute force check for out-of-order instructions
     steps = [line.strip().lower() for line in instructions.split("\n") if line.strip()]
     multitask_cues = ["while", "meanwhile", "as the", "during the"]
 
@@ -93,6 +92,7 @@ def score_instruction_coherence(instructions):
     return round(score, 2)
 
 def score_cues(instructions):
+    # Brute force check for cooking cues
     cues = [
         "until golden", "until soft", "until browned", "until crisp", "until tender",
         "until fragrant", "until bubbling", "until thickened", "until melted", "until reduced"
@@ -102,7 +102,8 @@ def score_cues(instructions):
     return round(len(found) / len(cues), 2)
 
 def score_plausibility(instructions):
-    # Placeholder: assume plausible unless known red flag is found
+    # Brute force check for implausible instructions
+    # assume plausible unless known red flag is found
     implausible_phrases = ["microwave for 2 hours", "boil lettuce", "grill yogurt"]
     for bad in implausible_phrases:
         if bad in instructions.lower():
@@ -112,50 +113,41 @@ def score_plausibility(instructions):
 def jaccard_similarity_set(set_a, set_b):
     return len(set_a & set_b) / len(set_a | set_b)
 
-def get_title_novelty(title, seen_titles):
-    title_novelty = 1.0
-    title_tokens = set(title.split())
-
-    for seen in seen_titles:
-        similarity = jaccard_similarity_set(title_tokens, seen)
-        if similarity > 0.7:
-            title_novelty = 0.0
-            break
-        if similarity > 0.3:
-            title_novelty = 0.5
-            break
-
-    return (title_novelty, title_tokens)
-
-def get_ingredient_novelty(ingredients, seen_ingredient_fingerprints):
-    ingredient_novelty = 1.0
-    ingredient_tokens = set(word for ing in ingredients for word in ing.split())
-
-    for seen in seen_ingredient_fingerprints:
-        overlap = len(seen.intersection(ingredient_tokens)) / max(len(seen.union(ingredient_tokens)), 1)
-        if overlap > 0.9:
-            ingredient_novelty = 0.0
-            break
-        if overlap > 0.6:
-            ingredient_novelty = 0.5
-            break
-
-    return (ingredient_novelty, ingredient_tokens)
-
 def score_novelty(recipe_entry, seen_titles, seen_ingredient_fingerprints):
+    config = METRIC_CONFIG["novelty_thresholds"]
     title = recipe_entry["recipe"].split("**Title:**")[1].split("\n")[0].strip().lower()
     ingredients = extract_ingredients(recipe_entry["recipe"])
 
-    title_novelty, title_tokens = get_title_novelty(title, seen_titles)
-    ingredient_novelty, ingredient_tokens = get_ingredient_novelty(ingredients, seen_ingredient_fingerprints)
+    title_tokens = set(title.split())
+    title_score = 1.0
+    for seen in seen_titles:
+        similarity = jaccard_similarity_set(title_tokens, seen)
+        if similarity > config["title"]["hard_penalty"]:
+            title_score = 0.0
+            break
+        elif similarity > config["title"]["soft_penalty"]:
+            title_score = 0.5
+            break
+
+    ingredient_tokens = set(word for ing in ingredients for word in ing.split())
+    ingredient_score = 1.0
+    for seen in seen_ingredient_fingerprints:
+        similarity = jaccard_similarity_set(ingredient_tokens, seen)
+        if similarity > config["ingredients"]["hard_penalty"]:
+            ingredient_score = 0.0
+            break
+        elif similarity > config["ingredients"]["soft_penalty"]:
+            ingredient_score = 0.5
+            break
 
     seen_titles.append(title_tokens)
     seen_ingredient_fingerprints.append(ingredient_tokens)
 
-    novelty = 0.6 * ingredient_novelty + 0.4 * title_novelty
-    # print(f"[Novelty] Title: {title}")
-    # print(f"      Title Score: {title_novelty}\n      Ingredients Score: {ingredient_novelty}\n      Final Score: {novelty}")
-    return novelty
+    novelty = (
+        config["weighting"]["title"] * title_score +
+        config["weighting"]["ingredients"] * ingredient_score
+    )
+    return round(novelty, 2)
 
 def score_conciseness(instructions):
     lines = [line for line in instructions.split("\n") if line.strip()]
