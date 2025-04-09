@@ -69,9 +69,9 @@ Under the hood it uses the OpenAI GPT-3.5 Turbo model, so an OpenAI API key is n
 chez_abed/
 ├── data/
 │   ├── abed_vocab.json          # ABED categories and descriptor options
-│   ├── abed_prompts.json        # Input prompts collected during CLI run
+│   ├── generated_abed_prompts.json        # Input prompts collected during CLI run
 │   ├── generated_recipes.json   # Output from recipe generation
-│   └── scored_recipes.json      # Scored results of recipes
+│   └── generated_scored_recipes.json      # Scored results of recipes
 ├── evaluation/
 │   └── scoring.py               # Scoring logic
 ├── scripts/

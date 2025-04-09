@@ -2,7 +2,7 @@
 {
     "name": "type",
     "prompt": "🍽️ Select which Type of meal this is",
-    "instruction": "space to select, enter to confirm",
+    "instruction": "",
     "options": ["Snack", "Breakfast", "Lunch", "Dinner", "Dessert"],
     "multi": false,
     "required": true

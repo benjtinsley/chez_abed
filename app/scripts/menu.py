@@ -5,7 +5,7 @@ import questionary
 
 ROOT_DIR = Path(__file__).resolve().parents[2]
 ABED_VOCAB_FILE = ROOT_DIR / "data" / "abed_vocab.json"
-PROMPTS_FILE = ROOT_DIR / "data" / "abed_prompts.json"
+PROMPTS_FILE = ROOT_DIR / "data" / "generated_abed_prompts.json"
 
 
 def load_abed_vocab():
@@ -81,7 +81,7 @@ def main():
 
     print("\n✅ All recipes generated and scored!\nCheck your files:")
     print("- 🧾 data/generated_recipes.json")
-    print("- 🏆 data/scored_recipes.json")
+    print("- 🏆 data/generated_scored_recipes.json")
 
 
 if __name__ == "__main__":

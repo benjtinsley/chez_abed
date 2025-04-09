@@ -10,7 +10,7 @@ with open(ROOT_DIR / "app" / "evaluation" / "metrics_config.yaml") as f:
     METRIC_CONFIG = yaml.safe_load(f)
 
 INPUT_FILE = ROOT_DIR / "data" / "generated_recipes.json"
-OUTPUT_FILE = ROOT_DIR / "data" / "scored_recipes.json"
+OUTPUT_FILE = ROOT_DIR / "data" / "generated_scored_recipes.json"
 
 with open(INPUT_FILE, "r") as f:
     data = json.load(f)

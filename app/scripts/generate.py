@@ -8,7 +8,7 @@ load_dotenv()
 ROOT_DIR = Path(__file__).resolve().parents[2]
 
 # File paths
-PROMPTS_FILE = ROOT_DIR / "data" / "abed_prompts.json"
+PROMPTS_FILE = ROOT_DIR / "data" / "generated_abed_prompts.json"
 TEMPLATE_FILE = ROOT_DIR / "prompts" / "base_prompt_template.txt"
 OUTPUT_FILE = ROOT_DIR / "data" / "generated_recipes.json"
 
