@@ -1,6 +1,6 @@
 # Chez Abed
 
-**Chez Abed** is a kitchen for an LLM-powered recipe generation tool. Instead of providing a list of ingredients, users input abstract sensory descriptors—called **ABEDs** (Abstracted Bare Element Descriptors) such as flavors, textures, and meal type. Chez Abed transforms these inputs into complete recipes and scores them based on creativity, structure, and coherence.
+**Chez Abed** is a kitchen for an LLM-powered recipe generation tool. Instead of providing a list of ingredients, users input **ABED**s (Abstracted Bare Element Descriptors) such as flavors, textures, and meal type. Chez Abed transforms these inputs into complete recipes and scores them based on creativity, structure, and coherence.
 
 ---
 
@@ -75,22 +75,25 @@ Under the hood it uses the OpenAI GPT-3.5 Turbo model, so an OpenAI API key is n
 ```
 chez_abed/
 ├── app/
-|   ├── data/
-|   │   ├── abed_vocab.json                    # ABED categories and descriptor options
-|   │   ├── generated_abed_prompts.json        # Input prompts collected during CLI run
-|   │   ├── generated_recipes.json             # Output from recipe generation
-|   │   └── generated_scored_recipes.json      # Scored results of recipes
-|   ├── evaluation/
-|   │   └── scoring.py                         # Scoring logic
-|   ├── scripts/
-|   │   ├── generate.py                        # Calls OpenAI to generate recipes
-|   │   ├── evaluate.py                        # Evaluates and scores generated recipes
-|   │   └── menu.py                            # Interactive CLI for creating recipe prompts
-├── logs/                                      # Logged recipes
-├── metrics_config.yaml                        # Scoring weights and novelty thresholds
-├── .env                                       # OpenAI key & other environment variables (not checked in)
-├── requirements.txt
-└── README.md
+│  ├── evaluation/
+│  │   ├── metrics_config.yaml                # Scoring weights and novelty thresholds
+│  │   └── scoring.py                         # Scoring logic
+│  ├── scripts/
+│  │   ├── generate.py                        # Calls OpenAI to generate recipes
+│  │   ├── evaluate.py                        # Evaluates and scores generated recipes
+│  │   └── menu.py                            # Interactive CLI for creating recipe prompts
+│  ├── utils/
+│  │   └── logging.py                         # Formats generated recipes to log/ format
+├── data/
+│   ├── abed_vocab.json                       # ABED categories and descriptor options
+│   ├── generated_abed_prompts.json           # Input prompts collected during CLI run
+│   ├── generated_recipes.json                # Output from recipe generation
+│   └── generated_scored_recipes.json         # Scored results of recipes
+├── logs/                                     # Logged recipes
+├── prompts/                                  # Prompts to generate consistent recipes
+├── .env                                      # OpenAI key & other environment variables (not checked in)
+├── README.md
+└── requirements.txt
 ```
 
 ---
