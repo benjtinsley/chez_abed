@@ -15,9 +15,12 @@ OUTPUT_FILE = ROOT_DIR /  "data/scored_recipes.json"
 with open(INPUT_FILE, "r") as f:
     data = json.load(f)
 
+seen_titles = []
+seen_ingredient_fingerprints = []
+
 for item in data:
     if "recipe" in item and item["recipe"]:
-        item["scores"] = score_recipe(item)
+        item["scores"] = score_recipe(item, seen_titles, seen_ingredient_fingerprints)
     else:
         item["scores"] = {"MScore": 0.0, "note": "No recipe text available"}
 
