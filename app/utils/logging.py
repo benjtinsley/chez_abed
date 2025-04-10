@@ -1,13 +1,14 @@
 from pathlib import Path
 from datetime import datetime
 import re
+from config import LOGS_DIR
 
 
 def sanitize_filename(title):
     return re.sub(r"[^\w\-]", "_", title.lower())
 
 
-def save_recipe_log(recipe: dict, root_dir: Path):
+def save_recipe_log(recipe: dict, log_dir: Path = LOGS_DIR):
     generated = recipe.get("recipe", {})
     timestamp = datetime.now()
 
@@ -16,7 +17,7 @@ def save_recipe_log(recipe: dict, root_dir: Path):
     day = timestamp.strftime("%d")
     time_str = timestamp.strftime("%H-%M-%S%f")[:-3]
 
-    log_dir = root_dir / "logs" / year / month / day
+    log_dir = LOGS_DIR / year / month / day
     log_dir.mkdir(parents=True, exist_ok=True)
 
     title = "untitled"

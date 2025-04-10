@@ -1,15 +1,11 @@
 import json
-from pathlib import Path
 import subprocess
 import questionary
-
-ROOT_DIR = Path(__file__).resolve().parents[2]
-ABED_VOCAB_FILE = ROOT_DIR / "data" / "abed_vocab.json"
-PROMPTS_FILE = ROOT_DIR / "data" / "generated_abed_prompts.json"
+from config import PROMPTS_FILE, VOCAB_FILE
 
 
 def load_abed_vocab():
-    with open(ABED_VOCAB_FILE, "r") as f:
+    with open(VOCAB_FILE, "r") as f:
         return json.load(f)
 
 

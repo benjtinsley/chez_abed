@@ -1,12 +1,11 @@
 import re
 import yaml
 import csv
-from pathlib import Path
+from config import METRICS_CONFIG_FILE, GENERATIONS_LOG_FILE
 
 # Load metric config from YAML
-ROOT_DIR = Path(__file__).resolve().parents[2]
-with open(ROOT_DIR / "app" / "evaluation" / "metrics_config.yaml") as f:
-    METRIC_CONFIG = yaml.safe_load(f)
+with open(METRICS_CONFIG_FILE) as f:
+    METRICS_CONFIG_FILE = yaml.safe_load(f)
 
 MEASURE_WORDS = [
     "tsp",
@@ -91,7 +90,7 @@ def score_recipe(recipe_entry):
     }
 
     # Weights for each metric
-    weights = METRIC_CONFIG["weights"]
+    weights = METRICS_CONFIG_FILE["weights"]
 
     total = sum(scores[k] * weights.get(k, 0) for k in scores)
     scores["MScore"] = round(total, 4)
@@ -227,7 +226,7 @@ def jaccard_similarity_set(set_a, set_b):
 
 
 def score_novelty(recipe_entry):
-    log_path = ROOT_DIR / "logs" / "generations_log.csv"
+    log_path = GENERATIONS_LOG_FILE
 
     # Quick check to create log if it doesn't exist
     if not log_path.exists():
@@ -267,7 +266,7 @@ def score_novelty(recipe_entry):
             writer.writeheader()
 
     # Calculate novelty
-    config = METRIC_CONFIG["novelty_thresholds"]
+    config = METRICS_CONFIG_FILE["novelty_thresholds"]
 
     title_score = 1.0
     for seen in existing_titles:

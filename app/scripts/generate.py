@@ -1,23 +1,23 @@
 import json
-from pathlib import Path
 from dotenv import load_dotenv
 import openai
+from config import (
+    PROMPTS_FILE,
+    TEMPLATE_PROMPT_FILE,
+    GENERATED_RECIPES_FILE,
+    DEFAULT_MODEL,
+    TEMPERATURE,
+    MAX_TOKENS,
+)
 
 load_dotenv()
-
-ROOT_DIR = Path(__file__).resolve().parents[2]
-
-# File paths
-PROMPTS_FILE = ROOT_DIR / "data" / "generated_abed_prompts.json"
-TEMPLATE_FILE = ROOT_DIR / "prompts" / "base_prompt_template.txt"
-OUTPUT_FILE = ROOT_DIR / "data" / "generated_recipes.json"
 
 # Load abstraction prompts
 with open(PROMPTS_FILE, "r") as f:
     abstraction_sets = json.load(f)
 
 # Load base prompt template
-with open(TEMPLATE_FILE, "r") as f:
+with open(TEMPLATE_PROMPT_FILE, "r") as f:
     base_prompt = f.read()
 
 # Collect generations
@@ -42,7 +42,7 @@ for entry in abstraction_sets:
     client = openai.OpenAI()
 
     response = client.chat.completions.create(
-        model="gpt-3.5-turbo",
+        model=DEFAULT_MODEL,
         messages=[
             {
                 "role": "system",
@@ -53,7 +53,8 @@ for entry in abstraction_sets:
             },
             {"role": "user", "content": filled_prompt},
         ],
-        temperature=0.8,
+        temperature=TEMPERATURE,
+        max_tokens=MAX_TOKENS,
     )
 
     recipe_output = response.choices[0].message.content
@@ -68,5 +69,5 @@ for entry in abstraction_sets:
     )
 
 # Save the prompts for review
-with open(OUTPUT_FILE, "w") as f:
+with open(GENERATED_RECIPES_FILE, "w") as f:
     json.dump(generated, f, indent=2)
