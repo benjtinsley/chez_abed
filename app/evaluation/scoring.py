@@ -1,5 +1,6 @@
 import re
 import yaml
+import csv
 from pathlib import Path
 
 # Load metric config from YAML
@@ -7,8 +8,62 @@ ROOT_DIR = Path(__file__).resolve().parents[2]
 with open(ROOT_DIR / "app" / "evaluation" / "metrics_config.yaml") as f:
     METRIC_CONFIG = yaml.safe_load(f)
 
+MEASURE_WORDS = [
+    "tsp",
+    "tbsp",
+    "teaspoon",
+    "tablespoon",
+    "cup",
+    "cups",
+    "oz",
+    "ounce",
+    "ounces",
+    "pint",
+    "quart",
+    "gallon",
+    "ml",
+    "liter",
+    "liters",
+    "grams",
+    "g",
+    "kg",
+    "pound",
+    "lb",
+    "lbs",
+    "dash",
+    "pinch",
+    "can",
+    "cans",
+    "package",
+    "packages",
+]
 
-def score_recipe(recipe_entry, seen_titles, seen_ingredient_fingerprints):
+PREP_METHODS = [
+    "minced",
+    "chopped",
+    "diced",
+    "sliced",
+    "crushed",
+    "grated",
+    "peeled",
+    "halved",
+    "shredded",
+    "zested",
+    "mashed",
+    "beaten",
+    "whisked",
+    "blended",
+    "rinsed",
+    "drained",
+    "to",
+    "taste",
+    "and",
+]
+
+STOPWORDS = set(MEASURE_WORDS + PREP_METHODS)
+
+
+def score_recipe(recipe_entry):
     """
     Score a single recipe entry from the generated_recipes.json file.
 
@@ -31,9 +86,7 @@ def score_recipe(recipe_entry, seen_titles, seen_ingredient_fingerprints):
         ),
         "cues": score_cues(instructions_text),
         "plausibility": score_plausibility(instructions_text),
-        "novelty": score_novelty(
-            recipe_entry, seen_titles, seen_ingredient_fingerprints
-        ),
+        "novelty": score_novelty(recipe_entry),
         "conciseness": score_conciseness(instructions_text),
     }
 
@@ -155,12 +208,34 @@ def score_plausibility(instructions):
     return 1.0
 
 
+def extract_ingredient_name(line):
+    # Remove bullet, lowercase, remove punctuation
+    line = re.sub(r"[^a-zA-Z\s]", "", line.lower().strip("- "))
+    tokens = line.split()
+
+    # Filter out quantities and techniques
+    filtered = [
+        word
+        for word in tokens
+        if word not in STOPWORDS and not word.isnumeric()
+    ]
+    return " ".join(filtered)
+
+
 def jaccard_similarity_set(set_a, set_b):
     return len(set_a & set_b) / len(set_a | set_b)
 
 
-def score_novelty(recipe_entry, seen_titles, seen_ingredient_fingerprints):
-    config = METRIC_CONFIG["novelty_thresholds"]
+def score_novelty(recipe_entry):
+    log_path = ROOT_DIR / "logs" / "generations_log.csv"
+
+    # Quick check to create log if it doesn't exist
+    if not log_path.exists():
+        log_path.parent.mkdir(parents=True, exist_ok=True)
+        with open(log_path, "w", newline="") as f:
+            writer = csv.DictWriter(f, fieldnames=["title", "ingredients"])
+            writer.writeheader()
+
     title = (
         recipe_entry["recipe"]
         .split("**Title:**")[1]
@@ -169,10 +244,33 @@ def score_novelty(recipe_entry, seen_titles, seen_ingredient_fingerprints):
         .lower()
     )
     ingredients = extract_ingredients(recipe_entry["recipe"])
-
     title_tokens = set(title.split())
+    ingredient_tokens = set(
+        word
+        for ing in ingredients
+        for word in extract_ingredient_name(ing).split()
+    )
+
+    # Read existing logs
+    existing_titles = []
+    existing_ingredients = []
+    if log_path.exists():
+        with open(log_path, "r") as f:
+            reader = csv.DictReader(f)
+            for row in reader:
+                existing_titles.append(set(row["title"].split()))
+                existing_ingredients.append(set(row["ingredients"].split()))
+    else:
+        # Create log with headers
+        with open(log_path, "w", newline="") as f:
+            writer = csv.DictWriter(f, fieldnames=["title", "ingredients"])
+            writer.writeheader()
+
+    # Calculate novelty
+    config = METRIC_CONFIG["novelty_thresholds"]
+
     title_score = 1.0
-    for seen in seen_titles:
+    for seen in existing_titles:
         similarity = jaccard_similarity_set(title_tokens, seen)
         if similarity > config["title"]["hard_penalty"]:
             title_score = 0.0
@@ -181,11 +279,8 @@ def score_novelty(recipe_entry, seen_titles, seen_ingredient_fingerprints):
             title_score = 0.5
             break
 
-    ingredient_tokens = set(
-        word for ing in ingredients for word in ing.split()
-    )
     ingredient_score = 1.0
-    for seen in seen_ingredient_fingerprints:
+    for seen in existing_ingredients:
         similarity = jaccard_similarity_set(ingredient_tokens, seen)
         if similarity > config["ingredients"]["hard_penalty"]:
             ingredient_score = 0.0
@@ -194,8 +289,15 @@ def score_novelty(recipe_entry, seen_titles, seen_ingredient_fingerprints):
             ingredient_score = 0.5
             break
 
-    seen_titles.append(title_tokens)
-    seen_ingredient_fingerprints.append(ingredient_tokens)
+    # Write current to log
+    with open(log_path, "a", newline="") as f:
+        writer = csv.DictWriter(f, fieldnames=["title", "ingredients"])
+        writer.writerow(
+            {
+                "title": " ".join(title_tokens),
+                "ingredients": " ".join(ingredient_tokens),
+            }
+        )
 
     novelty = (
         config["weighting"]["title"] * title_score

@@ -14,7 +14,7 @@ def save_recipe_log(recipe: dict, root_dir: Path):
     year = timestamp.strftime("%Y")
     month = timestamp.strftime("%m")
     day = timestamp.strftime("%d")
-    time_str = timestamp.strftime("%H-%M-%S")
+    time_str = timestamp.strftime("%H-%M-%S%f")[:-3]
 
     log_dir = root_dir / "logs" / year / month / day
     log_dir.mkdir(parents=True, exist_ok=True)

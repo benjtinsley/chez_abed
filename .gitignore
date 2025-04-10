@@ -67,7 +67,7 @@ coverage.xml
 
 # Logs
 *.log
-logs/*
+logs/
 
 # Generated Data
 data/generated_*.json
