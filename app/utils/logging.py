@@ -41,12 +41,12 @@ def save_recipe_log(recipe: dict, log_dir: Path = LOGS_DIR):
 
         if "scores" in recipe:
             f.write(
-                "\n\n---\n\n**MScore:** {:.2f}\n".format(
-                    recipe["scores"].get("MScore", 0.0)
+                "\n\n---\n\n**RScore:** {:.2f}\n".format(
+                    recipe["scores"].get("RScore", 0.0)
                 )
             )
             for key, val in recipe["scores"].items():
-                if key != "MScore":
+                if key != "RScore":
                     emoji = "✅" if val else "❌"
                     f.write(f"- {key.capitalize()}: {emoji}\n")
 

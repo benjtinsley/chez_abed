@@ -1,7 +1,10 @@
 import json
 import subprocess
 import questionary
+from rich.console import Console
 from config import PROMPTS_FILE, VOCAB_FILE
+
+console = Console()
 
 
 def load_abed_vocab():
@@ -60,9 +63,25 @@ def main():
     for idx, prompt in enumerate(all_prompts, start=1):
         flavor = ", ".join(prompt["flavor"]) if prompt["flavor"] else "—"
         texture = ", ".join(prompt["texture"]) if prompt["texture"] else "—"
-        print(
-            f"{idx}. Flavor: {flavor} | Texture: {texture} | "
-            f"Type: {prompt['type']}"
+        dietary_restrictions = (
+            ", ".join(prompt["dietary_restrictions"])
+            if prompt["dietary_restrictions"]
+            else "—"
+        )
+
+        console.print(f"[bold][magenta]{idx}.[/magenta]")
+        console.print(
+            f"   [bold underline]{prompt['mood']}"
+            f" {prompt['type']} for {prompt['total_served']}[/]"
+        )
+        console.print(
+            f"   [green bold]Flavor:[/] {flavor} |"
+            f" [green bold]Texture:[/] {texture}"
+        )
+        console.print(f"   [green bold]Diet:[/] {dietary_restrictions}")
+        console.print(
+            f"   [green bold]Technique Level:[/] {prompt['technique_level']} |"
+            f" [green bold]Prep Time:[/] {prompt['prep_time']}"
         )
 
     # Save to prompts file

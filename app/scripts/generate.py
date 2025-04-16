@@ -32,6 +32,17 @@ def build_prompt(template, entry):
         parts.append(f"- Texture: {', '.join(entry['texture'])}")
     if "type" in entry:
         parts.append(f"- Type: {entry['type']}")
+    if "mood" in entry:
+        parts.append(f"- Mood: {entry['mood']}")
+    if "dietary_restrictions" in entry and entry["dietary_restrictions"]:
+        parts.append(f"- Diet: {entry['dietary_restrictions']}")
+    if "total_served" in entry:
+        parts.append(f"- Total Served: {entry['total_served']}")
+    if "technique_level" in entry:
+        parts.append(f"- Technique Level: {entry['technique_level']}")
+    if "prep_time" in entry:
+        parts.append(f"- Prep Time: {entry['prep_time']}")
+
     descriptor_block = "\n".join(parts)
     return template.replace("{descriptors}", descriptor_block)
 

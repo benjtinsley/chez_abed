@@ -20,7 +20,7 @@ for item in data:
         filepath = save_recipe_log(item)
         print(f"📝 Logged recipe: {filepath}")
     else:
-        item["scores"] = {"MScore": 0.0, "note": "No recipe text available"}
+        item["scores"] = {"RScore": 0.0, "note": "No recipe text available"}
 
 with open(GENERATED_SCORED_RECIPES_FILE, "w") as f:
     json.dump(data, f, indent=2)

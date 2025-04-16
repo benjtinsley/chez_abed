@@ -1,17 +1,33 @@
 [
-{
+  {
     "name": "type",
     "prompt": "🍽️ Select which Type of meal this is",
     "instruction": "",
-    "options": ["Snack", "Breakfast", "Lunch", "Dinner", "Dessert"],
+    "options": ["Snack", "Breakfast", "Lunch", "Appetizer", "Dinner", "Dessert"],
     "multi": false,
     "required": true
- },
+  },
+  {
+    "name": "mood",
+    "prompt": "💭 Select any Mood descriptors",
+    "instruction": "",
+    "options": ["Energizing", "Comforting", "Indulgent", "Refreshing", "Trashy", "Refined", "Fun", "Nostalgic", "Rustic"],
+    "multi": false,
+    "required": false
+  },
+  {
+    "name": "total_served",
+    "prompt": "👥 Select the Total People served per recipe",
+    "instruction": "",
+    "options": ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10"],
+    "multi": false,
+    "required": true
+  },
   {
     "name": "flavor",
     "prompt": "🧂 Select any Flavor descriptors or leave blank",
     "instruction": "space to select, enter to confirm",
-    "options": ["sour", "fragrant", "peppery", "sweet", "fatty", "spiced", "salty", "earthy", "bitter"],
+    "options": ["Tangy", "Peppery", "Sweet", "Fatty", "Spiced", "Salty", "Earthy", "Fermented"],
     "multi": true,
     "required": false
   },
@@ -19,8 +35,32 @@
     "name": "texture",
     "prompt": "🍴 Select any Texture descriptors or leave blank",
     "instruction": "space to select, enter to confirm",
-    "options": ["crispy", "juicy", "crunchy", "smooth", "soft", "tender", "flaky", "creamy", "sticky", "chewy", "fluffy", "grainy"],
+    "options": ["Crispy", "Juicy", "Crunchy", "Smooth", "Soft", "Tender", "Flaky", "Creamy", "Sticky", "Chewy", "Fluffy", "Grainy"],
     "multi": true,
     "required": false
+  },
+  {
+    "name": "dietary_restrictions",
+    "prompt": "🚫 Select any Dietary Restrictions or leave blank",
+    "instruction": "space to select, enter to confirm",
+    "options": ["Vegetarian", "Vegan", "Gluten-free", "Dairy-free", "Nut-free", "Fish-free"],
+    "multi": true,
+    "required": false
+  },
+  {
+    "name": "prep_time",
+    "prompt": "⏱️ Select the desired Preparation Time",
+    "instruction": "",
+    "options": ["No preference", "Short", "Medium", "Long"],
+    "multi": false,
+    "required": true
+  },
+  {
+    "name": "technique_level",
+    "prompt": "🧑‍🍳 Select the desired Technique Level",
+    "instruction": "",
+    "options": ["No preference", "Beginner", "Intermediate", "Advanced"],
+    "multi": false,
+    "required": true
   }
 ]

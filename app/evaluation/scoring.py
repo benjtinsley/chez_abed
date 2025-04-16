@@ -93,7 +93,7 @@ def score_recipe(recipe_entry):
     weights = METRICS_CONFIG_FILE["weights"]
 
     total = sum(scores[k] * weights.get(k, 0) for k in scores)
-    scores["MScore"] = round(total, 4)
+    scores["RScore"] = round(total, 4)
     return scores
 
 
