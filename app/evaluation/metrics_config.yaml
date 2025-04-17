@@ -3,8 +3,10 @@
 weights:
   ingredient_usage_completeness: 0.25
   instruction_coherence: 0.25
-  plausibility: 0.2
-  conciseness: 0.15
+  abed_alignment: 0.2
+  plausibility: 0.1
+  redundancy_clarity: 0.05
+  conciseness: 0.05
   cues: 0.05
   novelty: 0.05
  

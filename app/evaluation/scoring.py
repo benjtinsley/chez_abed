@@ -116,6 +116,7 @@ def score_recipe(recipe_entry, parsed_steps, parsed_ingredients):
         "plausibility": score_plausibility(parsed_steps),
         "novelty": score_novelty(recipe_entry),
         "conciseness": score_conciseness(parsed_steps),
+        "redundancy_clarity": score_redundancy_clarity(parsed_steps),
         "abed_alignment": score_abed_alignment(
             recipe_entry, parsed_steps, parsed_ingredients
         ),
@@ -315,8 +316,13 @@ def score_conciseness(steps):
     return round(1 - repeated / len(lines), 2) if lines else 1.0
 
 
+def match_keywords(keywords, text):
+    return any(word in text for word in keywords)
+
+
 def score_abed_alignment(recipe_entry, steps, ingredients):
     abeds = recipe_entry.get("input", {})
+
     if not abeds:
         return 0.0
 
@@ -325,9 +331,6 @@ def score_abed_alignment(recipe_entry, steps, ingredients):
 
     # Flatten all relevant recipe text
     text = " ".join(steps + ingredients).lower()
-
-    def match_keywords(keywords, text):
-        return any(word in text for word in keywords)
 
     # Flavor
     for flavor in abeds.get("flavor", []):
@@ -352,3 +355,35 @@ def score_abed_alignment(recipe_entry, steps, ingredients):
             score += 1
 
     return round(score / total, 2) if total else 0.0
+
+
+def score_redundancy_clarity(steps):
+    repeated_lines = 0
+    seen_steps = set()
+    for step in steps:
+        clean = step.strip().lower()
+        if clean in seen_steps:
+            repeated_lines += 1
+        seen_steps.add(clean)
+
+    implausible_orderings = [
+        ("serve", "cook"),
+        ("serve", "bake"),
+        ("garnish", "fry"),
+        ("garnish", "roast"),
+    ]
+    order_issues = 0
+    for a, b in implausible_orderings:
+        idx_a = idx_b = -1
+        for i, step in enumerate(steps):
+            s = step.lower()
+            if a in s and idx_a == -1:
+                idx_a = i
+            if b in s and idx_b == -1:
+                idx_b = i
+        if idx_a != -1 and idx_b != -1 and idx_a < idx_b:
+            order_issues += 1
+
+    penalty = (repeated_lines + order_issues) * 0.2
+    score = max(0.0, 1.0 - penalty)
+    return round(score, 2)
