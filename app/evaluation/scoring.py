@@ -5,6 +5,17 @@ from datetime import datetime
 import json
 from pathlib import Path
 from config import METRICS_CONFIG_FILE, GENERATIONS_LOG_FILE
+from sentence_transformers import SentenceTransformer, util
+import pickle
+
+EMBEDDING_CACHE_PATH = Path("logs") / "embeddings_cache.pkl"
+if EMBEDDING_CACHE_PATH.exists():
+    with open(EMBEDDING_CACHE_PATH, "rb") as f:
+        EMBEDDING_CACHE = pickle.load(f)
+else:
+    EMBEDDING_CACHE = {}
+
+EMBEDDING_MODEL = SentenceTransformer("all-MiniLM-L6-v2")
 
 # Load metric config from YAML
 with open(METRICS_CONFIG_FILE) as f:
@@ -263,7 +274,6 @@ def jaccard_similarity_set(set_a, set_b):
 def score_novelty(recipe_entry):
     log_path = GENERATIONS_LOG_FILE
 
-    # Quick check to create log if it doesn't exist
     if not log_path.exists():
         log_path.parent.mkdir(parents=True, exist_ok=True)
         with open(log_path, "w", newline="") as f:
@@ -277,69 +287,56 @@ def score_novelty(recipe_entry):
         .strip()
         .lower()
     )
-    ingredients = recipe_entry["recipe"].split(
-        "\n"
-    )  # This line remains unchanged
-    title_tokens = set(title.split())
-    ingredient_tokens = set(
-        word
-        for ing in ingredients
-        for word in extract_ingredient_name(ing).split()
+    ingredients = recipe_entry["recipe"].split("\n")
+    ingredient_text = ", ".join(
+        extract_ingredient_name(ing) for ing in ingredients if ing.strip()
     )
+    current_text = f"{title}. Ingredients: {ingredient_text}"
+    if title in EMBEDDING_CACHE:
+        current_embedding = EMBEDDING_CACHE[title]
+    else:
+        current_embedding = EMBEDDING_MODEL.encode(
+            current_text, convert_to_tensor=True
+        )
+        EMBEDDING_CACHE[title] = current_embedding
+        with open(EMBEDDING_CACHE_PATH, "wb") as f:
+            pickle.dump(EMBEDDING_CACHE, f)
 
-    # Read existing logs
-    existing_titles = []
-    existing_ingredients = []
+    similarities = []
     if log_path.exists():
         with open(log_path, "r") as f:
             reader = csv.DictReader(f)
             for row in reader:
-                existing_titles.append(set(row["title"].split()))
-                existing_ingredients.append(set(row["ingredients"].split()))
-    else:
-        # Create log with headers
-        with open(log_path, "w", newline="") as f:
-            writer = csv.DictWriter(f, fieldnames=["title", "ingredients"])
-            writer.writeheader()
+                past_text = (
+                    f"{row['title']}. Ingredients: {row['ingredients']}"
+                )
+                if row["title"] in EMBEDDING_CACHE:
+                    past_embedding = EMBEDDING_CACHE[row["title"]]
+                else:
+                    past_embedding = EMBEDDING_MODEL.encode(
+                        past_text, convert_to_tensor=True
+                    )
+                    EMBEDDING_CACHE[row["title"]] = past_embedding
+                    with open(EMBEDDING_CACHE_PATH, "wb") as f:
+                        pickle.dump(EMBEDDING_CACHE, f)
+                sim = util.pytorch_cos_sim(
+                    current_embedding, past_embedding
+                ).item()
+                similarities.append(sim)
 
-    # Calculate novelty
-    config = METRICS_CONFIG_FILE["novelty_thresholds"]
+    max_sim = max(similarities, default=0)
+    novelty_score = 1.0 - max_sim
 
-    title_score = 1.0
-    for seen in existing_titles:
-        similarity = jaccard_similarity_set(title_tokens, seen)
-        if similarity > config["title"]["hard_penalty"]:
-            title_score = 0.0
-            break
-        elif similarity > config["title"]["soft_penalty"]:
-            title_score = 0.5
-            break
-
-    ingredient_score = 1.0
-    for seen in existing_ingredients:
-        similarity = jaccard_similarity_set(ingredient_tokens, seen)
-        if similarity > config["ingredients"]["hard_penalty"]:
-            ingredient_score = 0.0
-            break
-        elif similarity > config["ingredients"]["soft_penalty"]:
-            ingredient_score = 0.5
-            break
-
-    # Write current to log
     with open(log_path, "a", newline="") as f:
         writer = csv.DictWriter(f, fieldnames=["title", "ingredients"])
         writer.writerow(
             {
-                "title": " ".join(title_tokens),
-                "ingredients": " ".join(ingredient_tokens),
+                "title": title,
+                "ingredients": ingredient_text,
             }
         )
 
-    novelty = (
-        config["weighting"]["title"] * title_score
-        + config["weighting"]["ingredients"] * ingredient_score
-    )
-    return round(novelty, 2)
+    return round(novelty_score, 2)
 
 
 def score_conciseness(steps):
