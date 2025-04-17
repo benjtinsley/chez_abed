@@ -1,6 +1,9 @@
 import re
 import yaml
 import csv
+from datetime import datetime
+import json
+from pathlib import Path
 from config import METRICS_CONFIG_FILE, GENERATIONS_LOG_FILE
 
 # Load metric config from YAML
@@ -93,7 +96,9 @@ PREP_METHODS = [
 STOPWORDS = set(MEASURE_WORDS + PREP_METHODS)
 
 
-def score_recipe(recipe_entry, parsed_steps, parsed_ingredients):
+def score_recipe(
+    recipe_entry, parsed_steps, parsed_ingredients, log_reviews=False
+):
     """
     Score a single recipe entry from the generated_recipes.json file.
 
@@ -127,6 +132,33 @@ def score_recipe(recipe_entry, parsed_steps, parsed_ingredients):
 
     total = sum(scores[k] * weights.get(k, 0) for k in scores)
     scores["RScore"] = round(total, 4)
+
+    if log_reviews:
+        title_line = (
+            recipe_entry["recipe"]
+            .split("**Title:**")[1]
+            .split("\n")[0]
+            .strip()
+        )
+        log_entry = {
+            "timestamp": datetime.now().isoformat(),
+            "title": title_line,
+            "abed_input": recipe_entry.get("input", {}),
+            "RScore": scores["RScore"],
+        }
+
+        today = datetime.now()
+        log_path = (
+            Path("logs")
+            / str(today.year)
+            / f"{today.month:02d}"
+            / f"{today.day:02d}"
+            / "reviews.jsonl"
+        )
+        log_path.parent.mkdir(parents=True, exist_ok=True)
+        with open(log_path, "a") as f:
+            f.write(json.dumps(log_entry) + "\n")
+
     return scores
 
 
