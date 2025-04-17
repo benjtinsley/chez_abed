@@ -68,7 +68,21 @@ Under the hood it uses the OpenAI GPT-3.5 Turbo model, so an OpenAI API key is n
    - Score them using `evaluate.py`
 
    Generated recipes will be stored at logs/[year]/[month]/[date]/[time]-[recipe-title].md
+
+4. **Review recipes**
+
+   ```bash
+   python -m app.scripts.review
+   ```
+
+   You'll be prompted to rate each recipe on a scale of 1 to 5, which will be used to fine-tune the scoring model to your preferences.
+
+   The reviewable recipes will be stored at `logs/[year]/[month]/[date]/reviews.jsonl`
+
+   Any recipes reviewed will be stored at `logs/[year]/[month]/[date]/ratings.jsonl`
+
 ---
+
 
 ## Example Recipes
 
@@ -267,11 +281,11 @@ Future versions will include more NLP-driven and LLM-reflective scoring.
 
 ## 🧠 Future Plans
 
-- Incorporate additional ABEDs like mood, technique, diet
-- Replace heuristic scoring with NLP/embedding-based comparisons
-- Build and fine-tune a standalone LLM using Hugging Face models and domain-specific culinary datasets
-- Use OpenAI generations and Phase 1 scoring to guide dataset construction for training
-- Add markdown export, visualizations, and recipe summaries
+- [x] Incorporate additional ABEDs like mood, technique, diet
+- [x] Replace heuristic scoring with NLP/embedding-based comparisons
+- [ ] Build and fine-tune a standalone LLM using Hugging Face models and domain-specific culinary datasets
+- [ ] Use OpenAI generations and Phase 1 scoring to guide dataset construction for training
+- [ ] Add markdown export, visualizations, and recipe summaries
 
 ---
 
