@@ -18,11 +18,25 @@
 
 ## 🧪 Phase 1: Test Kitchen
 
-The current implementation is a **proof of concept**, emphasizing:
+Phase 1 was a **proof of concept**, emphasizing:
 - Prompting workflows
 - Basic scoring heuristics
 - ABED vocabulary architecture
 - CLI interface for structured generation + evaluation
+
+## 🍴 Phase 2: The Tasting Room
+
+Chez Abed now features a full recipe scoring and logging engine:
+- ABED-to-recipe prompting and logging
+- Ingredient and instruction parsing
+- Eight modular scoring metrics including:
+  - ABED alignment
+  - Cue detection
+  - Plausibility
+  - Redundancy & coherence
+  - Embedding-based novelty scoring
+- A full human-in-the-loop review system
+- Logs and caches to support future analysis and tuning
 
 Under the hood it uses the OpenAI GPT-3.5 Turbo model, so an OpenAI API key is needed to it.
 
@@ -292,3 +306,16 @@ Future versions will include more NLP-driven and LLM-reflective scoring.
 ## 🍷 License
 
 Apache 2.0 License. Use responsibly and creatively (not legally binding, just good advice).
+
+---
+
+
+
+### 🧪 Coming in Phase 3
+
+Version 3 will explore building and tuning a **custom LLM** to generate recipes based on the ABED input format. This will include:
+- ABED classifier + transformer finetuning
+- Dataset assembly using previous generations
+- Optional generation heads or adapters
+- Evaluation of smaller open models like Mistral or Phi
+
