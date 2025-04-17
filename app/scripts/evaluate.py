@@ -20,7 +20,7 @@ for item in data:
         parsed = parse_markdown_recipe(item["recipe"])
         item["parsed"] = parsed
         item["scores"] = score_recipe(
-            item, parsed["steps"], parsed["ingredients"]
+            item, parsed["steps"], parsed["ingredients"], log_reviews=True
         )
         filepath = save_recipe_log(item)
         print(f"📝 Logged recipe: {filepath}")
