@@ -62,7 +62,7 @@ PREP_METHODS = [
 STOPWORDS = set(MEASURE_WORDS + PREP_METHODS)
 
 
-def score_recipe(recipe_entry):
+def score_recipe(recipe_entry, parsed_steps, parsed_ingredients):
     """
     Score a single recipe entry from the generated_recipes.json file.
 
@@ -72,21 +72,19 @@ def score_recipe(recipe_entry):
     Returns:
     - dict: dictionary of individual metric scores and weighted total
     """
-    recipe_text = recipe_entry.get("recipe", "")
-    ingredients_list = extract_ingredients(recipe_text)
-    instructions_text = extract_instructions(recipe_text)
+    normalized_ingredients = [
+        extract_ingredient_name(ing) for ing in parsed_ingredients
+    ]
 
     scores = {
         "ingredient_usage_completeness": score_ingredient_usage(
-            ingredients_list, instructions_text
+            normalized_ingredients, parsed_steps
         ),
-        "instruction_coherence": score_instruction_coherence(
-            instructions_text
-        ),
-        "cues": score_cues(instructions_text),
-        "plausibility": score_plausibility(instructions_text),
+        "instruction_coherence": score_instruction_coherence(parsed_steps),
+        "cues": score_cues(parsed_steps),
+        "plausibility": score_plausibility(parsed_steps),
         "novelty": score_novelty(recipe_entry),
-        "conciseness": score_conciseness(instructions_text),
+        "conciseness": score_conciseness(parsed_steps),
     }
 
     # Weights for each metric
@@ -97,46 +95,19 @@ def score_recipe(recipe_entry):
     return scores
 
 
-# Stub functions (to be implemented)
-def extract_ingredients(recipe_text):
-    # Return a list of lowercased ingredient lines
-    match = re.search(r"\*\*Ingredients:\*\*(.*?)\*\*", recipe_text, re.DOTALL)
-    if not match:
-        return []
-    ingredients_block = match.group(1)
-    return [
-        line.strip().lower()
-        for line in ingredients_block.split("\n")
-        if line.strip().startswith("-")
-    ]
-
-
-def extract_instructions(recipe_text):
-    match = re.search(
-        r"\*\*Instructions:\*\*(.*?)\n\n|\Z", recipe_text, re.DOTALL
-    )
-    if not match:
-        return ""
-    return match.group(1).strip()
-
-
-def score_ingredient_usage(ingredients, instructions):
+def score_ingredient_usage(ingredients, steps):
     # Score based on % of ingredients mentioned in instructions
+    instructions_text = " ".join(steps)
     mentioned = sum(
         1
         for ing in ingredients
-        if any(word in instructions.lower() for word in ing.split())
+        if all(word in instructions_text.lower() for word in ing.split())
     )
     return round(mentioned / len(ingredients), 2) if ingredients else 0
 
 
-def score_instruction_coherence(instructions):
+def score_instruction_coherence(steps):
     # Brute force check for out-of-order instructions
-    steps = [
-        line.strip().lower()
-        for line in instructions.split("\n")
-        if line.strip()
-    ]
     multitask_cues = ["while", "meanwhile", "as the", "during the"]
 
     out_of_order_phrases = [
@@ -160,11 +131,6 @@ def score_instruction_coherence(instructions):
             if phrase2 in step and second == -1:
                 second = i
         if first != -1 and second != -1 and first < second:
-            # print(
-            #     f"[Coherence] '{phrase1}'"
-            #     "found before '{phrase2}'"
-            #     "at steps {first} < {second}"
-            # )
             penalties += 1
 
     # Apply penalty for each detected inversion
@@ -174,9 +140,9 @@ def score_instruction_coherence(instructions):
     return round(score, 2)
 
 
-def score_cues(instructions):
+def score_cues(steps: list[str]) -> float:
     # Brute force check for cooking cues
-    cues = [
+    cue_keywords = [
         "until",
         "when",
         "after",
@@ -188,14 +154,16 @@ def score_cues(instructions):
         "next",
         "finally",
     ]
-    instructions_lower = instructions.lower()
-    found = set(cue for cue in cues if cue in instructions_lower)
-    return round(len(found) / len(cues), 2)
+    cues_found = any(
+        any(cue in step.lower() for cue in cue_keywords) for step in steps
+    )
+    return 1.0 if cues_found else 0.0
 
 
-def score_plausibility(instructions):
+def score_plausibility(steps):
     # Brute force check for implausible instructions
     # assume plausible unless known red flag is found
+    instructions = " ".join(steps)
     implausible_phrases = [
         "microwave for 2 hours",
         "boil lettuce",
@@ -242,7 +210,9 @@ def score_novelty(recipe_entry):
         .strip()
         .lower()
     )
-    ingredients = extract_ingredients(recipe_entry["recipe"])
+    ingredients = recipe_entry["recipe"].split(
+        "\n"
+    )  # This line remains unchanged
     title_tokens = set(title.split())
     ingredient_tokens = set(
         word
@@ -305,7 +275,7 @@ def score_novelty(recipe_entry):
     return round(novelty, 2)
 
 
-def score_conciseness(instructions):
-    lines = [line for line in instructions.split("\n") if line.strip()]
+def score_conciseness(steps):
+    lines = [line for line in steps if line.strip()]
     repeated = sum(1 for i in range(1, len(lines)) if lines[i] == lines[i - 1])
     return round(1 - repeated / len(lines), 2) if lines else 1.0

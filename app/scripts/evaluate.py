@@ -19,7 +19,9 @@ for item in data:
     if "recipe" in item and item["recipe"]:
         parsed = parse_markdown_recipe(item["recipe"])
         item["parsed"] = parsed
-        item["scores"] = score_recipe(item)
+        item["scores"] = score_recipe(
+            item, parsed["steps"], parsed["ingredients"]
+        )
         filepath = save_recipe_log(item)
         print(f"📝 Logged recipe: {filepath}")
     else:

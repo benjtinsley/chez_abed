@@ -49,7 +49,7 @@ def main():
         all_prompts.append(abed_set)
 
         more = questionary.confirm(
-            "Would you like to add another recipe with a different ABED set?"
+            "Would you like to add another recipe?", default=False
         ).ask()
         if not more:
             break
