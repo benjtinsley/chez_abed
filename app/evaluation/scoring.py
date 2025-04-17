@@ -7,6 +7,37 @@ from config import METRICS_CONFIG_FILE, GENERATIONS_LOG_FILE
 with open(METRICS_CONFIG_FILE) as f:
     METRICS_CONFIG_FILE = yaml.safe_load(f)
 
+FLAVOR_KEYWORDS = {
+    "sweet": ["sugar", "honey", "syrup", "molasses", "maple"],
+    "tangy": ["lemon", "lime", "vinegar", "pickled", "tamarind"],
+    "salty": ["salt", "soy sauce", "brine"],
+    "peppery": ["chili", "pepper", "hot sauce", "jalapeno"],
+    "spiced": [
+        "cinnamon",
+        "cumin",
+        "garlic",
+        "onion",
+        "ginger",
+        "nutmeg",
+        "clove",
+    ],
+    "fatty": ["butter", "cream", "bacon", "oil"],
+    "bitter": ["coffee", "dark chocolate", "kale"],
+    "earthy": ["mushroom", "truffle", "miso", "soy"],
+}
+
+TEXTURE_KEYWORDS = {
+    "crispy": ["crisp", "crunch", "bake", "fry"],
+    "chewy": ["chewy", "doughy", "stretchy"],
+    "creamy": ["cream", "custard", "puree", "smooth"],
+    "fluffy": ["fluffy", "airy", "whipped"],
+    "juicy": ["juicy", "moist", "dripping"],
+    "smooth": ["smooth", "silky"],
+    "dry": ["dry", "crumbly"],
+    "soft": ["soft", "tender"],
+    "grainy": ["grainy", "grain", "rice", "course"],
+}
+
 MEASURE_WORDS = [
     "tsp",
     "tbsp",
@@ -85,6 +116,9 @@ def score_recipe(recipe_entry, parsed_steps, parsed_ingredients):
         "plausibility": score_plausibility(parsed_steps),
         "novelty": score_novelty(recipe_entry),
         "conciseness": score_conciseness(parsed_steps),
+        "abed_alignment": score_abed_alignment(
+            recipe_entry, parsed_steps, parsed_ingredients
+        ),
     }
 
     # Weights for each metric
@@ -279,3 +313,42 @@ def score_conciseness(steps):
     lines = [line for line in steps if line.strip()]
     repeated = sum(1 for i in range(1, len(lines)) if lines[i] == lines[i - 1])
     return round(1 - repeated / len(lines), 2) if lines else 1.0
+
+
+def score_abed_alignment(recipe_entry, steps, ingredients):
+    abeds = recipe_entry.get("input", {})
+    if not abeds:
+        return 0.0
+
+    score = 0
+    total = 0
+
+    # Flatten all relevant recipe text
+    text = " ".join(steps + ingredients).lower()
+
+    def match_keywords(keywords, text):
+        return any(word in text for word in keywords)
+
+    # Flavor
+    for flavor in abeds.get("flavor", []):
+        total += 1
+        if flavor in FLAVOR_KEYWORDS and match_keywords(
+            FLAVOR_KEYWORDS[flavor], text
+        ):
+            score += 1
+
+    # Texture
+    for texture in abeds.get("texture", []):
+        total += 1
+        if texture in TEXTURE_KEYWORDS and match_keywords(
+            TEXTURE_KEYWORDS[texture], text
+        ):
+            score += 1
+
+    # Type
+    if "type" in abeds:
+        total += 1
+        if abeds["type"].lower() in text:
+            score += 1
+
+    return round(score / total, 2) if total else 0.0

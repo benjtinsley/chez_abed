@@ -27,7 +27,7 @@
     "name": "flavor",
     "prompt": "🧂 Select any Flavor descriptors or leave blank",
     "instruction": "space to select, enter to confirm",
-    "options": ["Tangy", "Peppery", "Sweet", "Fatty", "Spiced", "Salty", "Earthy", "Fermented"],
+    "options": ["Tangy", "Peppery", "Sweet", "Fatty", "Spiced", "Salty", "Earthy", "Bitter"],
     "multi": true,
     "required": false
   },

@@ -47,7 +47,7 @@ def save_recipe_log(recipe: dict, log_dir: Path = LOGS_DIR):
             )
             for key, val in recipe["scores"].items():
                 if key != "RScore":
-                    emoji = "✅" if val else "❌"
-                    f.write(f"- {key.capitalize()}: {emoji}\n")
+                    emoji = "✅" if val > 0.6 else "❌"
+                    f.write(f"- {key.capitalize()}: {emoji} ({val:.2f})\n")
 
     return filepath
