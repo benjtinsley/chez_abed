@@ -19,8 +19,8 @@ def infer_type(title):
 
 def convert_entry(entry):
     title = entry["title"]
-    ingredients = [ing["text"] for ing in entry["ingredients"]]
-    instructions = entry.get("instructions", "").strip()
+    ingredients = entry["ingredients"]
+    instructions = entry.get("instructions", [])
 
     abed = {
         "flavor": [],  # Leave empty for now
@@ -33,7 +33,7 @@ def convert_entry(entry):
         "output": {
             "title": title,
             "ingredients": ingredients,
-            "steps": instructions.split(". "),
+            "steps": instructions,
         },
     }
     return prompt
